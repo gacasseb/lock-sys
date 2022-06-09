@@ -1,6 +1,22 @@
 version: '3.8'
 services:
+  mysqldb:
+    container_name: lock-db
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=lock-sys
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - web 
   web:
+    container_name: lock-sys
+    depends_on:
+      - mysqldb
     build:
       context: ./
       target: dev
@@ -9,6 +25,15 @@ services:
     command: npm run start:dev
     ports:
       - "3000:3000"
+    networks:
+      - web 
     environment:
       NODE_ENV: development
       DEBUG: nodejs-docker-express:*
+
+networks:
+  web:
+    driver: bridge
+
+volumes: 
+  db:
