@@ -7,10 +7,11 @@ app.use(express.json());
 
 const user = require('./controllers/users');
 const auth = require('./services/auth');
+const authMiddleware = require('./middlewares/auth');
 
 database.sync();
 
-app.get('/', (req, res) => {
+app.get('/', authMiddleware, (req, res) => {
   res.json('aloha!');
 });
 
