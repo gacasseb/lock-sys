@@ -25,6 +25,7 @@ services:
     command: npm run start:dev
     ports:
       - "3000:3000"
+      - "1883:1883"
     networks:
       - web 
     environment:

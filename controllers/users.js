@@ -23,16 +23,14 @@ const userController = {
                 });
 
             } else {
-                res.statusCode = 400;
-                return res.json({
+                return res.status(400).json({
                     'status': 'failed',
                     'message': 'user not registred'
                 });
             }
         }
 
-        res.statusCode = 400;
-        return res.json({
+        return res.status(400).json({
             'status': 'failed',
             'message': 'params data is missing'
         });

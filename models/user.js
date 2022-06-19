@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
 const database = require('../database/db');
+const Device = require('./device');
 
 const User = database.define('user', {
         id: {
@@ -29,5 +30,8 @@ const User = database.define('user', {
         createdAt: 'created_at'
     }
 );
+
+User.hasMany(Device);
+Device.belongsTo(User);
 
 module.exports = User;

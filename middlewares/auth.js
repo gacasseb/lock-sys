@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const user = require('../services/users');
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, 'SUPER_CHAVE');
@@ -10,6 +11,7 @@ const auth = (req, res, next) => {
             throw 'Invalid user ID';
 
         } else {
+            req.user = await user.findUser({id: userId});
             next();
         }
         
