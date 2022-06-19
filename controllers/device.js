@@ -1,4 +1,5 @@
 const Device = require('../models/device');
+const broker = require('../broker');
 
 const deviceController = {
     insertDevice: async (req, res) => {
@@ -104,6 +105,29 @@ const deviceController = {
             res.status(500).json({
                 'status': 'failed',
                 'message': 'something went wrong'
+            });
+        }
+    },
+    interact: async (req, res) => {
+        try {
+            const device = await Device.findByPk(req.params.id);
+            if ( device && device.userId == req.user.id ) {
+                broker.publish({ topic: `${device.code}`, payload: '1'});
+                res.json({
+                    status: 'success'
+                });
+            } else {
+                res.status(404).json({
+                    status: 'failed',
+                    message: 'device not found'
+                });    
+            }
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({
+                status: 'failed',
+                message: 'something went wrong'
             });
         }
     }
